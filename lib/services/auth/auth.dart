@@ -55,6 +55,10 @@ class AuthenticationService {
     var authorizationToken = UserSharedPreference.getAuthorizationToken();
     var userID = UserSharedPreference.getUserID();
 
+    if (userID == null) {
+      return null;
+    }
+
     var uri = Uri.parse('${GlobalConstants.baseURL}/users/$userID');
 
     Map<String, String> headers = {
