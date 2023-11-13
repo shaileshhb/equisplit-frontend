@@ -17,8 +17,8 @@ class UserSharedPreference {
     return _preferences.getString(_keyAuthToken);
   }
 
-  static Future setUserID(String userID) async {
-    await _preferences.setString(_keyUserID, userID);
+  static Future setUserID(int userID) async {
+    await _preferences.setInt(_keyUserID, userID);
   }
 
   static String? getUserID() {

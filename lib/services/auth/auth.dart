@@ -42,9 +42,9 @@ class AuthenticationService {
 
     var response = await client.post(uri, body: body, headers: headers);
 
-    if (response.statusCode == 200) {
-      var json = response.body;
-      return loginResponseFromJson(json);
+    if (response.statusCode == 201) {
+      var body = response.body;
+      return loginResponseFromJson(body);
     }
     return null;
   }

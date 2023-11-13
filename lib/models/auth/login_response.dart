@@ -17,20 +17,20 @@ class LoginResponse {
     required this.token,
   });
 
-  String userId;
+  int userId;
   String name;
   String email;
   String token;
 
   factory LoginResponse.fromJson(Map<String, dynamic> json) => LoginResponse(
-        userId: json["userID"],
+        userId: json["userId"],
         name: json["name"],
         email: json["email"],
         token: json["token"],
       );
 
   Map<String, dynamic> toJson() => {
-        "userID": userId,
+        "userId": userId,
         "name": name,
         "email": email,
         "token": token,

@@ -41,7 +41,9 @@ class _LoginState extends State<Login> {
         _setUserID(loginResponse.userId);
 
         // navigate to dashboard
+        print(mounted);
         if (mounted) {
+          print("navigating to placeholder");
           _navigateToDashboard(context);
         }
       }
@@ -54,7 +56,7 @@ class _LoginState extends State<Login> {
     await UserSharedPreference.setAuthorizationToken(token);
   }
 
-  void _setUserID(String userID) async {
+  void _setUserID(int userID) async {
     await UserSharedPreference.setUserID(userID);
   }
 
@@ -103,15 +105,16 @@ class _LoginState extends State<Login> {
 
                   const SizedBox(height: 50),
 
-                  // username, password
+                  // email, password
                   LoginFormField(
                     controller: emailController,
                     hintText: "Email",
                     obscureText: false,
-                    validator: (username) {
-                      if (username!.isEmpty ||
-                          !RegExp(r'^[a-z A-Z]+$').hasMatch(username)) {
-                        return "Invalid username";
+                    validator: (email) {
+                      if (email!.isEmpty ||
+                          !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                              .hasMatch(email)) {
+                        return "Invalid email";
                       }
                       return null;
                     },

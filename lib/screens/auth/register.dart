@@ -79,7 +79,7 @@ class _RegisterState extends State<Register> {
     await UserSharedPreference.setAuthorizationToken(token);
   }
 
-  void _setUserID(String userID) async {
+  void _setUserID(int userID) async {
     await UserSharedPreference.setUserID(userID);
   }
 
@@ -98,7 +98,7 @@ class _RegisterState extends State<Register> {
   @override
   void initState() {
     super.initState();
-    genderListState();
+    // genderListState();
   }
 
   @override
