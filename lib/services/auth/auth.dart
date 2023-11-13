@@ -3,7 +3,9 @@ import "dart:convert";
 import "package:equisplit_frontend/models/auth/login_request.dart";
 import "package:equisplit_frontend/models/auth/login_response.dart";
 import "package:equisplit_frontend/models/auth/register_request.dart";
+import "package:equisplit_frontend/models/auth/user.dart";
 import "package:equisplit_frontend/utils/global.constant.dart";
+import "package:equisplit_frontend/utils/user.shared_preference.dart";
 import 'package:http/http.dart' as http;
 
 class AuthenticationService {
@@ -43,6 +45,27 @@ class AuthenticationService {
     if (response.statusCode == 200) {
       var json = response.body;
       return loginResponseFromJson(json);
+    }
+    return null;
+  }
+
+  Future<User?> getUser() async {
+    var client = http.Client();
+
+    var authorizationToken = UserSharedPreference.getAuthorizationToken();
+    var userID = UserSharedPreference.getUserID();
+
+    var uri = Uri.parse('${GlobalConstants.baseURL}/users/$userID');
+
+    Map<String, String> headers = {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer $authorizationToken"
+    };
+
+    var response = await client.get(uri, headers: headers);
+
+    if (response.statusCode == 200) {
+      return userFromJson(response.body);
     }
     return null;
   }

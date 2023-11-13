@@ -1,3 +1,5 @@
+import 'package:equisplit_frontend/screens/auth/login.dart';
+import 'package:equisplit_frontend/services/auth/auth.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -8,6 +10,27 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    getUser();
+  }
+
+  getUser() async {
+    try {
+      var response = await AuthenticationService().getUser();
+
+      if (response != null) {
+        _navigateToDashboard();
+        return;
+      }
+      _navigateToLogin();
+    } catch (err) {
+      print(err);
+      _navigateToLogin();
+    }
+  }
+
   void _navigateToDashboard() {
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => const Placeholder()));
@@ -18,8 +41,7 @@ class _SplashScreenState extends State<SplashScreen> {
     // await Future.delayed(const Duration(milliseconds: 1500), () {
     // });
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const Placeholder()));
-    // context, MaterialPageRoute(builder: (context) => const Login()));
+        context, MaterialPageRoute(builder: (context) => const Login()));
   }
 
   @override
