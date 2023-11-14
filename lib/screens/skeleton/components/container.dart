@@ -1,3 +1,4 @@
+import 'package:equisplit_frontend/utils/global.colors.dart';
 import 'package:flutter/material.dart';
 import 'package:skeleton_text/skeleton_text.dart';
 
@@ -25,7 +26,9 @@ class SkeletonContainer extends StatelessWidget {
         width: width,
         height: height,
         decoration: BoxDecoration(
-          color: Colors.blueGrey[300],
+          // color: Colors.blueGrey[300],
+          color: GlobalColors.skeleton,
+          borderRadius: BorderRadius.circular(5),
         ),
       ),
     );

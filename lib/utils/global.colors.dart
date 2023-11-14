@@ -7,4 +7,5 @@ class GlobalColors {
   static const Color seedColor = Color(0xFF132238);
   static const Color cardBorder = Color(0xFF364E68);
   static const Color appBar = Color(0xFFADC4CE);
+  static const Color skeleton = Color(0xFF364E68);
 }
