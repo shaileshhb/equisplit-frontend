@@ -1,4 +1,5 @@
 import 'package:equisplit_frontend/models/group/user_group.dart';
+import 'package:equisplit_frontend/screens/skeleton/builder.dart';
 import 'package:equisplit_frontend/services/group/group.dart';
 import 'package:equisplit_frontend/utils/global.colors.dart';
 import 'package:flutter/material.dart';
@@ -79,7 +80,7 @@ class _UserGroupState extends State<UserGroup> {
                   itemBuilder: (context, index) {
                     return userGroups!.isNotEmpty
                         ? groupCard(index)
-                        : Placeholder();
+                        : const SkeletonCardBuilder();
                   },
                 ),
               ),
