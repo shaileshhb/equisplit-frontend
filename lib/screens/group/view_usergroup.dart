@@ -4,14 +4,14 @@ import 'package:equisplit_frontend/services/group/group.dart';
 import 'package:equisplit_frontend/utils/global.colors.dart';
 import 'package:flutter/material.dart';
 
-class UserGroup extends StatefulWidget {
-  const UserGroup({super.key});
+class ViewUserGroup extends StatefulWidget {
+  const ViewUserGroup({super.key});
 
   @override
-  State<UserGroup> createState() => _UserGroupState();
+  State<ViewUserGroup> createState() => _ViewUserGroupState();
 }
 
-class _UserGroupState extends State<UserGroup> {
+class _ViewUserGroupState extends State<ViewUserGroup> {
   List<UserGroupEntity>? userGroups;
   bool isLoaded = false;
   final double marginLeft = 10.0;

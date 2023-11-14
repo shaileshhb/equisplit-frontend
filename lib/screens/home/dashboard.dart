@@ -1,4 +1,4 @@
-import 'package:equisplit_frontend/screens/group/group.dart';
+import 'package:equisplit_frontend/screens/group/view_usergroup.dart';
 import 'package:flutter/material.dart';
 
 class Dashboard extends StatefulWidget {
@@ -17,7 +17,7 @@ class _DashboardState extends State<Dashboard> {
   int _selectedIndex = 0;
 
   static const List<Widget> _widgetOptions = <Widget>[
-    UserGroup(),
+    ViewUserGroup(),
     Placeholder(),
     Placeholder(),
   ];
