@@ -79,7 +79,7 @@ class _UserGroupState extends State<UserGroup> {
                   itemCount: isLoaded ? userGroups!.length : 5,
                   itemBuilder: (context, index) {
                     return userGroups!.isNotEmpty
-                        ? const SkeletonCardBuilder()
+                        ? groupCard(index)
                         : const SkeletonCardBuilder();
                   },
                 ),
