@@ -20,7 +20,8 @@ class MyApp extends StatelessWidget {
       title: 'Equisplit',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.deepPurple,
+          seedColor: GlobalColors.seedColor,
+          // seedColor: Colors.deepPurple,
           background: GlobalColors.backgroundColor,
         ),
         useMaterial3: true,

@@ -1,4 +1,5 @@
 import 'package:equisplit_frontend/screens/auth/login.dart';
+import 'package:equisplit_frontend/screens/home/dashboard.dart';
 import 'package:equisplit_frontend/services/auth/auth.dart';
 import 'package:flutter/material.dart';
 
@@ -19,7 +20,6 @@ class _SplashScreenState extends State<SplashScreen> {
   getUser() async {
     try {
       var response = await AuthenticationService().getUser();
-
       if (response != null) {
         _navigateToDashboard();
         return;
@@ -33,8 +33,9 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void _navigateToDashboard() {
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const Placeholder()));
-    // builder: (context) => const Dashboard(selectedIndex: 0)));
+        context,
+        MaterialPageRoute(
+            builder: (context) => const Dashboard(selectedIndex: 0)));
   }
 
   _navigateToLogin() async {

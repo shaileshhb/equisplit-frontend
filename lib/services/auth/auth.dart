@@ -59,7 +59,7 @@ class AuthenticationService {
       return null;
     }
 
-    var uri = Uri.parse('${GlobalConstants.baseURL}/users/$userID');
+    var uri = Uri.parse('${GlobalConstants.baseURL}/user/$userID');
 
     Map<String, String> headers = {
       "Content-Type": "application/json",
@@ -69,6 +69,7 @@ class AuthenticationService {
     var response = await client.get(uri, headers: headers);
 
     if (response.statusCode == 200) {
+      print(response.body);
       return userFromJson(response.body);
     }
     return null;

@@ -5,7 +5,7 @@ Group groupFromJson(String str) => Group.fromJson(json.decode(str));
 String groupToJson(Group data) => json.encode(data.toJson());
 
 class Group {
-  String? id;
+  int? id;
   String name;
   int createdBy;
   double totalSpent;
@@ -18,20 +18,16 @@ class Group {
   });
 
   factory Group.fromJson(Map<String, dynamic> json) => Group(
+        id: json["id"],
         name: json["name"],
         createdBy: json["createdBy"],
-        totalSpent: json["totalSpent"],
+        totalSpent: double.parse(json["totalSpent"].toString()),
       );
 
   Map<String, dynamic> toJson() => {
+        "id": id,
         "name": name,
         "createdBy": createdBy,
         "totalSpent": totalSpent,
-        // "username": username,
-        // "gender": gender,
-        // "contact": contact,
-        // "dateOfBirth": dateOfBirth,
-        // "profileImage": profileImage,
-        // "isVerified": isVerified,
       };
 }

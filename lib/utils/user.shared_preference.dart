@@ -21,8 +21,8 @@ class UserSharedPreference {
     await _preferences.setInt(_keyUserID, userID);
   }
 
-  static String? getUserID() {
-    return _preferences.getString(_keyUserID);
+  static int? getUserID() {
+    return _preferences.getInt(_keyUserID);
   }
 
   static void removeAuthorizationToken() async {

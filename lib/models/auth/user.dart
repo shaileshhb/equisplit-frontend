@@ -10,7 +10,7 @@ String userToJson(User data) => json.encode(data.toJson());
 
 class User {
   User({
-    required this.id,
+    this.id,
     required this.name,
     required this.email,
     // required this.username,
@@ -21,7 +21,7 @@ class User {
     // required this.isVerified,
   });
 
-  String id;
+  int? id;
   String name;
   String email;
   // String username;

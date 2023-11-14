@@ -83,6 +83,7 @@ class _LoginState extends State<Login> {
               key: formGlobalKey,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   const SizedBox(height: 50),
 
@@ -142,7 +143,7 @@ class _LoginState extends State<Login> {
                     buttonLabel: "Login",
                   ),
 
-                  const SizedBox(height: 200),
+                  const SizedBox(height: 20),
 
                   // redirect to register
                   Row(
