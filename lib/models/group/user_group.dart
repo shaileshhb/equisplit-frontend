@@ -19,6 +19,7 @@ class UserGroupEntity {
   int groupId;
   double outgoingAmount;
   double incomingAmount;
+  dynamic summary;
 
   UserGroupEntity({
     this.id,
@@ -27,6 +28,7 @@ class UserGroupEntity {
     this.incomingAmount = 0,
     this.user,
     this.group,
+    this.summary,
   });
 
   factory UserGroupEntity.fromJson(Map<String, dynamic> body) =>
@@ -36,9 +38,12 @@ class UserGroupEntity {
         user: body["user"] != null
             ? userFromJson(json.encode(body["user"]))
             : null,
-        group: groupFromJson(json.encode(body["group"])),
+        group: body["group"] != null
+            ? groupFromJson(json.encode(body["group"]))
+            : null,
         outgoingAmount: double.parse(body["outgoingAmount"].toString()),
         incomingAmount: double.parse(body["incomingAmount"].toString()),
+        summary: body["summary"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -48,5 +53,6 @@ class UserGroupEntity {
         "group": group,
         "outgoingAmount": outgoingAmount,
         "incomingAmount": incomingAmount,
+        "summary": summary,
       };
 }

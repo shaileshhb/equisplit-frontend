@@ -1,23 +1,22 @@
 import 'package:equisplit_frontend/models/group/user_group.dart';
-import 'package:equisplit_frontend/screens/components/button.dart';
-import 'package:equisplit_frontend/screens/group/create.dart';
-import 'package:equisplit_frontend/screens/group/details.dart';
 import 'package:equisplit_frontend/screens/skeleton/builder.dart';
 import 'package:equisplit_frontend/services/group/group.dart';
 import 'package:equisplit_frontend/utils/global.colors.dart';
-import 'package:equisplit_frontend/utils/user.shared_preference.dart';
 import 'package:flutter/material.dart';
 
-class ViewUserGroup extends StatefulWidget {
-  const ViewUserGroup({super.key});
+class GroupDetails extends StatefulWidget {
+  final int groupId;
+  const GroupDetails({
+    super.key,
+    required this.groupId,
+  });
 
   @override
-  State<ViewUserGroup> createState() => _ViewUserGroupState();
+  State<GroupDetails> createState() => _GroupDetailsState();
 }
 
-class _ViewUserGroupState extends State<ViewUserGroup> {
+class _GroupDetailsState extends State<GroupDetails> {
   List<UserGroupEntity>? userGroups;
-  int userId = UserSharedPreference.getUserID()!;
   bool isLoaded = false;
   final double marginLeft = 10.0;
   final double marginBottom = 10.0;
@@ -31,34 +30,24 @@ class _ViewUserGroupState extends State<ViewUserGroup> {
     setState(() {
       userGroups = [];
     });
-    getUserGroups();
+    getGroupDetails();
   }
 
-  getUserGroups() async {
+  void getGroupDetails() async {
     try {
-      var response = await UserGroupService().getUserGroups();
+      var response = await UserGroupService().getGroupDetails(widget.groupId);
       if (response != null) {
         setState(() {
           userGroups = response;
         });
       }
-    } catch (err) {
-      print(err);
+    } catch (e) {
+      print(e);
     } finally {
       setState(() {
         isLoaded = true;
       });
     }
-  }
-
-  void _navigateToCreateGroup(BuildContext context) {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => const CreateGroup()));
-  }
-
-  void _navigateToGroupDetails(BuildContext context, int id) {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => GroupDetails(groupId: id)));
   }
 
   @override
@@ -73,25 +62,18 @@ class _ViewUserGroupState extends State<ViewUserGroup> {
       ),
       body: SafeArea(
         child: isLoaded && userGroups != null && userGroups!.isEmpty
-            ? Center(
+            ? const Center(
                 child: SizedBox(
                   width: 250,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      const Text(
-                        "You have not created groups yet!",
+                      Text(
+                        "Group details could not be fetched",
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: 25.0,
+                          fontSize: 20.0,
                         ),
-                      ),
-                      const SizedBox(height: 15),
-                      CustomButton(
-                        onTap: () {
-                          _navigateToCreateGroup(context);
-                        },
-                        buttonLabel: "Create your group",
                       ),
                     ],
                   ),
@@ -110,14 +92,6 @@ class _ViewUserGroupState extends State<ViewUserGroup> {
                   },
                 ),
               ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _navigateToCreateGroup(context);
-        },
-        backgroundColor: GlobalColors.buttonColor,
-        foregroundColor: Colors.white,
-        child: const Icon(Icons.add),
       ),
     );
   }
@@ -138,30 +112,17 @@ class _ViewUserGroupState extends State<ViewUserGroup> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              TextButton(
-                onPressed: () {
-                  _navigateToGroupDetails(context, userGroups![index].groupId);
-                },
-                style: TextButton.styleFrom(
-                  foregroundColor: Colors.black,
-                ),
+              Container(
+                margin: EdgeInsets.only(left: marginLeft, top: marginTop),
                 child: Text(
-                  userGroups![index].group!.name.toUpperCase(),
+                  userGroups![index].user!.name.toUpperCase(),
                   style: const TextStyle(
                     fontSize: 18,
                   ),
                 ),
               ),
-              if (userId == userGroups![index].group!.createdBy)
-                IconButton(
-                  icon: const Icon(Icons.edit),
-                  onPressed: () {
-                    // TODO: Need to navigate to create/edit group.
-                    print("button pressed");
-                  },
-                ),
             ],
           ),
           const Divider(
@@ -175,13 +136,13 @@ class _ViewUserGroupState extends State<ViewUserGroup> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  'Outgoing amount: ${userGroups![index].summary['outgoingAmount']}',
+                  'Outgoing amount: ${userGroups![index].outgoingAmount}',
                   style: const TextStyle(
                     fontSize: 15.0,
                   ),
                 ),
                 Text(
-                  'Incoming amount: ${userGroups![index].summary['incomingAmount']}',
+                  'Incoming amount: ${userGroups![index].incomingAmount}',
                   style: const TextStyle(
                     fontSize: 15.0,
                   ),

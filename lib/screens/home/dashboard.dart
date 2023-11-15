@@ -17,8 +17,8 @@ class _DashboardState extends State<Dashboard> {
   int _selectedIndex = 0;
 
   static const List<Widget> _widgetOptions = <Widget>[
-    ViewUserGroup(),
     Placeholder(),
+    ViewUserGroup(),
     Placeholder(),
   ];
 
@@ -55,8 +55,8 @@ class _DashboardState extends State<Dashboard> {
             label: "Home",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.money),
-            label: "Transactions",
+            icon: Icon(Icons.group),
+            label: "Groups",
           ),
           BottomNavigationBarItem(
             icon: CircleAvatar(

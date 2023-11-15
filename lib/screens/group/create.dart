@@ -48,7 +48,7 @@ class _CreateGroupState extends State<CreateGroup> {
       context,
       MaterialPageRoute(
         builder: (context) => const Dashboard(
-          selectedIndex: 0,
+          selectedIndex: 1,
         ),
       ),
     );
