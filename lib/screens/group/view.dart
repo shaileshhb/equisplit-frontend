@@ -56,9 +56,14 @@ class _ViewUserGroupState extends State<ViewUserGroup> {
         context, MaterialPageRoute(builder: (context) => const CreateGroup()));
   }
 
-  void _navigateToGroupDetails(BuildContext context, int id) {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => GroupDetails(groupId: id)));
+  void _navigateToGroupDetails(BuildContext context, UserGroupEntity group) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => GroupDetails(
+                  groupId: group.groupId,
+                  groupName: group.group!.name,
+                )));
   }
 
   @override
@@ -142,7 +147,7 @@ class _ViewUserGroupState extends State<ViewUserGroup> {
             children: <Widget>[
               TextButton(
                 onPressed: () {
-                  _navigateToGroupDetails(context, userGroups![index].groupId);
+                  _navigateToGroupDetails(context, userGroups![index]);
                 },
                 style: TextButton.styleFrom(
                   foregroundColor: Colors.black,

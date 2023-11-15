@@ -31,7 +31,7 @@ class UserGroupService {
     var client = http.Client();
     var authorizationToken = UserSharedPreference.getAuthorizationToken();
 
-    var uri = Uri.parse('${GlobalConstants.baseURL}/group/$groupId/user');
+    var uri = Uri.parse('${GlobalConstants.baseURL}/group/$groupId');
 
     Map<String, String> headers = {
       "Content-Type": "application/json",

@@ -6,9 +6,12 @@ import 'package:flutter/material.dart';
 
 class GroupDetails extends StatefulWidget {
   final int groupId;
+  final String groupName;
+
   const GroupDetails({
     super.key,
     required this.groupId,
+    required this.groupName,
   });
 
   @override
@@ -54,7 +57,7 @@ class _GroupDetailsState extends State<GroupDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Home"),
+        title: Text(widget.groupName.toUpperCase()),
         backgroundColor: GlobalColors.appBar,
         automaticallyImplyLeading: false,
         centerTitle: true,
@@ -136,13 +139,13 @@ class _GroupDetailsState extends State<GroupDetails> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  'Outgoing amount: ${userGroups![index].outgoingAmount}',
+                  'Outgoing amount: ${userGroups![index].summary["outgoingAmount"]}',
                   style: const TextStyle(
                     fontSize: 15.0,
                   ),
                 ),
                 Text(
-                  'Incoming amount: ${userGroups![index].incomingAmount}',
+                  'Incoming amount: ${userGroups![index].summary["incomingAmount"]}',
                   style: const TextStyle(
                     fontSize: 15.0,
                   ),
