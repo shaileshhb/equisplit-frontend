@@ -1,4 +1,6 @@
 import 'package:equisplit_frontend/models/group/user_group.dart';
+import 'package:equisplit_frontend/screens/components/button.dart';
+import 'package:equisplit_frontend/screens/group/create.dart';
 import 'package:equisplit_frontend/screens/skeleton/builder.dart';
 import 'package:equisplit_frontend/services/group/group.dart';
 import 'package:equisplit_frontend/utils/global.colors.dart';
@@ -32,7 +34,6 @@ class _ViewUserGroupState extends State<ViewUserGroup> {
   getUserGroups() async {
     try {
       var response = await UserGroupService().getUserGroups();
-      print(response);
       if (response != null) {
         setState(() {
           userGroups = response;
@@ -47,6 +48,11 @@ class _ViewUserGroupState extends State<ViewUserGroup> {
     }
   }
 
+  void _navigateToCreateGroup(BuildContext context) {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => const CreateGroup()));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,15 +65,27 @@ class _ViewUserGroupState extends State<ViewUserGroup> {
       ),
       body: SafeArea(
         child: isLoaded && userGroups != null && userGroups!.isEmpty
-            ? const Center(
+            ? Center(
                 child: SizedBox(
                   width: 250,
-                  child: Text(
-                    "You have not created groups yet!",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 25.0,
-                    ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      const Text(
+                        "You have not created groups yet!",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 25.0,
+                        ),
+                      ),
+                      const SizedBox(height: 15),
+                      CustomButton(
+                        onTap: () {
+                          _navigateToCreateGroup(context);
+                        },
+                        buttonLabel: "Create your group",
+                      ),
+                    ],
                   ),
                 ),
               )

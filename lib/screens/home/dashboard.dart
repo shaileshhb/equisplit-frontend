@@ -1,4 +1,4 @@
-import 'package:equisplit_frontend/screens/group/view_usergroup.dart';
+import 'package:equisplit_frontend/screens/group/view.dart';
 import 'package:flutter/material.dart';
 
 class Dashboard extends StatefulWidget {

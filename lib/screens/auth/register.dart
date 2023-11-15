@@ -90,9 +90,7 @@ class _RegisterState extends State<Register> {
 
   void _navigateToOnboardingScreen(BuildContext context) {
     Navigator.pushReplacement(
-        context,
-        // MaterialPageRoute(builder: (context) => const OnboardingScreen()));
-        MaterialPageRoute(builder: (context) => const Placeholder()));
+        context, MaterialPageRoute(builder: (context) => const Login()));
   }
 
   @override

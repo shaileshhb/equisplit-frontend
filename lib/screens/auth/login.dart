@@ -2,6 +2,7 @@ import 'package:equisplit_frontend/models/auth/login_request.dart';
 import 'package:equisplit_frontend/screens/auth/components/login_button.dart';
 import 'package:equisplit_frontend/screens/auth/components/login_form_field.dart';
 import 'package:equisplit_frontend/screens/auth/register.dart';
+import 'package:equisplit_frontend/screens/home/dashboard.dart';
 import 'package:equisplit_frontend/services/auth/auth.dart';
 import 'package:equisplit_frontend/utils/user.shared_preference.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +44,6 @@ class _LoginState extends State<Login> {
         // navigate to dashboard
         print(mounted);
         if (mounted) {
-          print("navigating to placeholder");
           _navigateToDashboard(context);
         }
       }
@@ -67,9 +67,7 @@ class _LoginState extends State<Login> {
 
   void _navigateToDashboard(BuildContext context) {
     Navigator.pushReplacement(
-        // context, MaterialPageRoute(builder: (context) => const Dashboard()));
-        context,
-        MaterialPageRoute(builder: (context) => const Placeholder()));
+        context, MaterialPageRoute(builder: (context) => const Dashboard()));
   }
 
   @override

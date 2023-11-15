@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
 
-class FormField extends StatefulWidget {
+class CustomFormField extends StatefulWidget {
   final controller;
   final String hintText;
-  final bool obscureText;
   final String? Function(String?)? validator;
 
-  const FormField({
+  const CustomFormField({
     super.key,
     required this.controller,
     required this.hintText,
-    required this.obscureText,
     required this.validator,
   });
 
   @override
-  State<FormField> createState() => _FormFieldState();
+  State<CustomFormField> createState() => _CustomFormFieldState();
 }
 
-class _FormFieldState extends State<FormField> {
+class _CustomFormFieldState extends State<CustomFormField> {
   bool isPasswordVisible = false;
 
   @override
@@ -28,7 +26,6 @@ class _FormFieldState extends State<FormField> {
       child: TextFormField(
         controller: widget.controller,
         validator: widget.validator,
-        obscureText: widget.obscureText ? !isPasswordVisible : false,
         decoration: InputDecoration(
           enabledBorder: const OutlineInputBorder(
             borderSide: BorderSide(

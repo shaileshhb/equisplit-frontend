@@ -1,11 +1,11 @@
 import 'package:equisplit_frontend/utils/global.colors.dart';
 import 'package:flutter/material.dart';
 
-class Button extends StatelessWidget {
+class CustomButton extends StatelessWidget {
   final Function()? onTap;
   final String buttonLabel;
 
-  const Button({
+  const CustomButton({
     super.key,
     required this.onTap,
     required this.buttonLabel,
@@ -16,7 +16,7 @@ class Button extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(15),
+        padding: const EdgeInsets.all(10),
         margin: const EdgeInsets.symmetric(horizontal: 25),
         decoration: BoxDecoration(
           // color: Colors.black,
