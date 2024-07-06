@@ -2,12 +2,15 @@ import 'dart:convert';
 
 Group groupFromJson(String str) => Group.fromJson(json.decode(str));
 
+List<Group> groupsFromJson(String str) =>
+    List<Group>.from(json.decode(str).map((x) => Group.fromJson(x)));
+
 String groupToJson(Group data) => json.encode(data.toJson());
 
 class Group {
-  int? id;
+  String? id;
   String name;
-  int createdBy;
+  String createdBy;
   double totalSpent;
 
   Group({

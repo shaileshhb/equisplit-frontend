@@ -4,6 +4,7 @@ import "package:equisplit_frontend/models/auth/login_request.dart";
 import "package:equisplit_frontend/models/auth/login_response.dart";
 import "package:equisplit_frontend/models/auth/register_request.dart";
 import "package:equisplit_frontend/models/auth/user.dart";
+import "package:equisplit_frontend/models/error/error_response.dart";
 import "package:equisplit_frontend/utils/global.constant.dart";
 import "package:equisplit_frontend/utils/user.shared_preference.dart";
 import 'package:http/http.dart' as http;
@@ -26,6 +27,11 @@ class AuthenticationService {
       var json = response.body;
       return loginResponseFromJson(json);
     }
+
+    if (response.statusCode >= 400) {
+      throw CustomException(errorResponseFromJson(response.body).error);
+    }
+
     return null;
   }
 

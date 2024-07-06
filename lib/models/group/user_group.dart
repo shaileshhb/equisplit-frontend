@@ -13,10 +13,10 @@ List<UserGroupEntity> userGroupsFromJson(String str) =>
 String userGroupToJson(UserGroupEntity data) => json.encode(data.toJson());
 
 class UserGroupEntity {
-  int? id;
+  String? id;
   User? user;
   Group? group;
-  int groupId;
+  String groupId;
   double outgoingAmount;
   double incomingAmount;
   dynamic summary;

@@ -1,4 +1,5 @@
 import 'package:equisplit_frontend/models/auth/login_request.dart';
+import 'package:equisplit_frontend/models/error/error_response.dart';
 import 'package:equisplit_frontend/screens/auth/components/login_button.dart';
 import 'package:equisplit_frontend/screens/auth/components/login_form_field.dart';
 import 'package:equisplit_frontend/screens/auth/register.dart';
@@ -27,6 +28,8 @@ class _LoginState extends State<Login> {
     }
   }
 
+  String errorMessage = "";
+
   void userLogin() async {
     try {
       var loginRequest = LoginRequest(
@@ -47,8 +50,9 @@ class _LoginState extends State<Login> {
           _navigateToDashboard(context);
         }
       }
-    } catch (err) {
-      print(err);
+    } on CustomException catch (e) {
+      print(e.error);
+      errorMessage = e.error;
     }
   }
 
@@ -56,7 +60,7 @@ class _LoginState extends State<Login> {
     await UserSharedPreference.setAuthorizationToken(token);
   }
 
-  void _setUserID(int userID) async {
+  void _setUserID(String userID) async {
     await UserSharedPreference.setUserID(userID);
   }
 
@@ -68,6 +72,28 @@ class _LoginState extends State<Login> {
   void _navigateToDashboard(BuildContext context) {
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => const Dashboard()));
+  }
+
+  Widget _displayErrorMessage(BuildContext context) {
+    print("_displayErrorMessage $errorMessage");
+    if (errorMessage == "") {
+      return const SizedBox(height: 20);
+    }
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        const SizedBox(height: 20),
+        Text(
+          errorMessage,
+          style: const TextStyle(
+            color: Color(0xF0443800),
+            fontSize: 16,
+          ),
+        ),
+      ],
+    );
   }
 
   @override
@@ -83,13 +109,6 @@ class _LoginState extends State<Login> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   const SizedBox(height: 50),
-
-                  // logo
-                  // const Icon(
-                  //   Icons.lock,
-                  //   size: 100,
-                  // ),
-
                   const SizedBox(height: 50),
 
                   // welcome message
@@ -165,6 +184,8 @@ class _LoginState extends State<Login> {
                       ),
                     ],
                   ),
+
+                  _displayErrorMessage(context),
                 ],
               ),
             ),

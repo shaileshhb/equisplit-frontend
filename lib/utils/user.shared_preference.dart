@@ -17,12 +17,12 @@ class UserSharedPreference {
     return _preferences.getString(_keyAuthToken);
   }
 
-  static Future setUserID(int userID) async {
-    await _preferences.setInt(_keyUserID, userID);
+  static Future setUserID(String userID) async {
+    await _preferences.setString(_keyUserID, userID);
   }
 
-  static int? getUserID() {
-    return _preferences.getInt(_keyUserID);
+  static String? getUserID() {
+    return _preferences.getString(_keyUserID);
   }
 
   static void removeAuthorizationToken() async {

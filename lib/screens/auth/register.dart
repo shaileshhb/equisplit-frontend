@@ -79,7 +79,7 @@ class _RegisterState extends State<Register> {
     await UserSharedPreference.setAuthorizationToken(token);
   }
 
-  void _setUserID(int userID) async {
+  void _setUserID(String userID) async {
     await UserSharedPreference.setUserID(userID);
   }
 

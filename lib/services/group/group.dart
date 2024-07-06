@@ -5,12 +5,12 @@ import 'package:equisplit_frontend/utils/user.shared_preference.dart';
 import 'package:http/http.dart' as http;
 
 class UserGroupService {
-  Future<List<UserGroupEntity>?> getUserGroups() async {
+  Future<List<Group>?> getUserGroups() async {
     var client = http.Client();
     var authorizationToken = UserSharedPreference.getAuthorizationToken();
-    var userId = UserSharedPreference.getUserID();
+    String userId = UserSharedPreference.getUserID()!;
 
-    var uri = Uri.parse('${GlobalConstants.baseURL}/user/$userId/group');
+    var uri = Uri.parse('${GlobalConstants.baseURL}/user/$userId/groups');
 
     Map<String, String> headers = {
       "Content-Type": "application/json",
@@ -21,13 +21,13 @@ class UserGroupService {
 
     if (response.statusCode == 200) {
       var body = response.body;
-      return userGroupsFromJson(body);
+      return groupsFromJson(body);
     }
 
     return null;
   }
 
-  Future<List<UserGroupEntity>?> getGroupDetails(int groupId) async {
+  Future<List<UserGroupEntity>?> getGroupDetails(String groupId) async {
     var client = http.Client();
     var authorizationToken = UserSharedPreference.getAuthorizationToken();
 
@@ -42,8 +42,8 @@ class UserGroupService {
 
     if (response.statusCode == 200) {
       var body = response.body;
-      print(body);
-      return userGroupsFromJson(body);
+      var json = userGroupsFromJson(body);
+      return json;
     }
 
     return null;

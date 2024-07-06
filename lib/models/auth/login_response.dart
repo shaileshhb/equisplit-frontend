@@ -17,7 +17,7 @@ class LoginResponse {
     required this.token,
   });
 
-  int userId;
+  String userId;
   String name;
   String email;
   String token;

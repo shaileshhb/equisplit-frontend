@@ -1,4 +1,4 @@
-import 'package:equisplit_frontend/models/group/user_group.dart';
+import 'package:equisplit_frontend/models/group/group.dart';
 import 'package:equisplit_frontend/screens/components/button.dart';
 import 'package:equisplit_frontend/screens/group/create.dart';
 import 'package:equisplit_frontend/screens/group/details.dart';
@@ -16,8 +16,8 @@ class ViewUserGroup extends StatefulWidget {
 }
 
 class _ViewUserGroupState extends State<ViewUserGroup> {
-  List<UserGroupEntity>? userGroups;
-  int userId = UserSharedPreference.getUserID()!;
+  List<Group>? groups;
+  String userId = UserSharedPreference.getUserID()!;
   bool isLoaded = false;
   final double marginLeft = 10.0;
   final double marginBottom = 10.0;
@@ -29,7 +29,7 @@ class _ViewUserGroupState extends State<ViewUserGroup> {
   void initState() {
     super.initState();
     setState(() {
-      userGroups = [];
+      groups = [];
     });
     getUserGroups();
   }
@@ -39,7 +39,7 @@ class _ViewUserGroupState extends State<ViewUserGroup> {
       var response = await UserGroupService().getUserGroups();
       if (response != null) {
         setState(() {
-          userGroups = response;
+          groups = response;
         });
       }
     } catch (err) {
@@ -56,13 +56,13 @@ class _ViewUserGroupState extends State<ViewUserGroup> {
         context, MaterialPageRoute(builder: (context) => const CreateGroup()));
   }
 
-  void _navigateToGroupDetails(BuildContext context, UserGroupEntity group) {
+  void _navigateToGroupDetails(BuildContext context, Group group) {
     Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => GroupDetails(
-                  groupId: group.groupId,
-                  groupName: group.group!.name,
+                  groupId: group.id!,
+                  groupName: group.name,
                 )));
   }
 
@@ -70,14 +70,14 @@ class _ViewUserGroupState extends State<ViewUserGroup> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Home"),
+        title: const Text("Groups"),
         backgroundColor: GlobalColors.appBar,
         automaticallyImplyLeading: false,
         centerTitle: true,
         elevation: 1,
       ),
       body: SafeArea(
-        child: isLoaded && userGroups != null && userGroups!.isEmpty
+        child: isLoaded && groups != null && groups!.isEmpty
             ? Center(
                 child: SizedBox(
                   width: 250,
@@ -107,9 +107,9 @@ class _ViewUserGroupState extends State<ViewUserGroup> {
                 child: ListView.builder(
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
-                  itemCount: isLoaded ? userGroups!.length : 5,
+                  itemCount: isLoaded ? groups!.length : 5,
                   itemBuilder: (context, index) {
-                    return userGroups!.isNotEmpty
+                    return groups!.isNotEmpty
                         ? groupCard(index)
                         : const SkeletonCardBuilder();
                   },
@@ -147,19 +147,19 @@ class _ViewUserGroupState extends State<ViewUserGroup> {
             children: <Widget>[
               TextButton(
                 onPressed: () {
-                  _navigateToGroupDetails(context, userGroups![index]);
+                  _navigateToGroupDetails(context, groups![index]);
                 },
                 style: TextButton.styleFrom(
                   foregroundColor: Colors.black,
                 ),
                 child: Text(
-                  userGroups![index].group!.name.toUpperCase(),
+                  groups![index].name.toUpperCase(),
                   style: const TextStyle(
                     fontSize: 18,
                   ),
                 ),
               ),
-              if (userId == userGroups![index].group!.createdBy)
+              if (userId == groups![index].createdBy)
                 IconButton(
                   icon: const Icon(Icons.edit),
                   onPressed: () {
@@ -169,31 +169,31 @@ class _ViewUserGroupState extends State<ViewUserGroup> {
                 ),
             ],
           ),
-          const Divider(
-            color: GlobalColors.cardBorder,
-            thickness: 0.8,
-          ),
-          Container(
-            margin: EdgeInsets.only(bottom: marginBottom, left: marginLeft),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  'Outgoing amount: ${userGroups![index].summary['outgoingAmount']}',
-                  style: const TextStyle(
-                    fontSize: 15.0,
-                  ),
-                ),
-                Text(
-                  'Incoming amount: ${userGroups![index].summary['incomingAmount']}',
-                  style: const TextStyle(
-                    fontSize: 15.0,
-                  ),
-                ),
-              ],
-            ),
-          ),
+          // const Divider(
+          //   color: GlobalColors.cardBorder,
+          //   thickness: 0.8,
+          // ),
+          // Container(
+          //   margin: EdgeInsets.only(bottom: marginBottom, left: marginLeft),
+          //   child: Column(
+          //     mainAxisAlignment: MainAxisAlignment.start,
+          //     crossAxisAlignment: CrossAxisAlignment.start,
+          //     children: <Widget>[
+          //       Text(
+          //         'Outgoing amount: ${userGroups![index].summary['outgoingAmount']}',
+          //         style: const TextStyle(
+          //           fontSize: 15.0,
+          //         ),
+          //       ),
+          //       Text(
+          //         'Incoming amount: ${userGroups![index].summary['incomingAmount']}',
+          //         style: const TextStyle(
+          //           fontSize: 15.0,
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // ),
         ],
       ),
     );

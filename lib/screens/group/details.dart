@@ -1,11 +1,11 @@
-import 'package:equisplit_frontend/models/group/user_group.dart';
 import 'package:equisplit_frontend/screens/skeleton/builder.dart';
-import 'package:equisplit_frontend/services/group/group.dart';
+import 'package:equisplit_frontend/services/transaction/transaction.dart';
+import 'package:equisplit_frontend/services/transaction/user_balance.dart';
 import 'package:equisplit_frontend/utils/global.colors.dart';
 import 'package:flutter/material.dart';
 
 class GroupDetails extends StatefulWidget {
-  final int groupId;
+  final String groupId;
   final String groupName;
 
   const GroupDetails({
@@ -19,7 +19,7 @@ class GroupDetails extends StatefulWidget {
 }
 
 class _GroupDetailsState extends State<GroupDetails> {
-  List<UserGroupEntity>? userGroups;
+  List<UserBalance>? userBalances;
   bool isLoaded = false;
   final double marginLeft = 10.0;
   final double marginBottom = 10.0;
@@ -31,17 +31,19 @@ class _GroupDetailsState extends State<GroupDetails> {
   void initState() {
     super.initState();
     setState(() {
-      userGroups = [];
+      userBalances = [];
     });
-    getGroupDetails();
+    getUserBalances();
   }
 
-  void getGroupDetails() async {
+  void getUserBalances() async {
     try {
-      var response = await UserGroupService().getGroupDetails(widget.groupId);
+      var response =
+          await UserTransactionService().getUserTransactions(widget.groupId);
       if (response != null) {
+        print(response.length);
         setState(() {
-          userGroups = response;
+          userBalances = response;
         });
       }
     } catch (e) {
@@ -64,7 +66,7 @@ class _GroupDetailsState extends State<GroupDetails> {
         elevation: 1,
       ),
       body: SafeArea(
-        child: isLoaded && userGroups != null && userGroups!.isEmpty
+        child: isLoaded && userBalances != null && userBalances!.isEmpty
             ? const Center(
                 child: SizedBox(
                   width: 250,
@@ -87,9 +89,9 @@ class _GroupDetailsState extends State<GroupDetails> {
                 child: ListView.builder(
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
-                  itemCount: isLoaded ? userGroups!.length : 5,
+                  itemCount: isLoaded ? userBalances!.length : 5,
                   itemBuilder: (context, index) {
-                    return userGroups!.isNotEmpty
+                    return userBalances!.isNotEmpty
                         ? groupCard(index)
                         : const SkeletonCardBuilder();
                   },
@@ -120,7 +122,7 @@ class _GroupDetailsState extends State<GroupDetails> {
               Container(
                 margin: EdgeInsets.only(left: marginLeft, top: marginTop),
                 child: Text(
-                  userGroups![index].user!.name.toUpperCase(),
+                  userBalances![index].user.name.toUpperCase(),
                   style: const TextStyle(
                     fontSize: 18,
                   ),
@@ -139,13 +141,7 @@ class _GroupDetailsState extends State<GroupDetails> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  'Outgoing amount: ${userGroups![index].summary["outgoingAmount"]}',
-                  style: const TextStyle(
-                    fontSize: 15.0,
-                  ),
-                ),
-                Text(
-                  'Incoming amount: ${userGroups![index].summary["incomingAmount"]}',
+                  'Amount: ${userBalances![index].amount}',
                   style: const TextStyle(
                     fontSize: 15.0,
                   ),
