@@ -100,7 +100,7 @@ class _GroupDetailsState extends State<GroupDetails> {
                 margin: EdgeInsets.only(top: marginTop),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     CustomButton(
                       buttonLabel: "Add new transaction",

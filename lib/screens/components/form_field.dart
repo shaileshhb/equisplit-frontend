@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CustomFormField extends StatefulWidget {
   final controller;
   final String hintText;
   final String? Function(String?)? validator;
+  final TextInputType? keyboardType;
+  final List<TextInputFormatter>? inputFormatters;
 
   const CustomFormField({
     super.key,
     required this.controller,
     required this.hintText,
     required this.validator,
+    this.keyboardType,
+    this.inputFormatters,
   });
 
   @override
@@ -26,10 +31,12 @@ class _CustomFormFieldState extends State<CustomFormField> {
       child: TextFormField(
         controller: widget.controller,
         validator: widget.validator,
+        keyboardType: widget.keyboardType ?? TextInputType.number,
+        inputFormatters: widget.inputFormatters,
         decoration: InputDecoration(
           enabledBorder: const OutlineInputBorder(
             borderSide: BorderSide(
-              color: Colors.white,
+              color: Color.fromARGB(255, 206, 206, 206),
             ),
           ),
           focusedBorder: OutlineInputBorder(

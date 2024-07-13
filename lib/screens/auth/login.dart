@@ -45,7 +45,6 @@ class _LoginState extends State<Login> {
         _setUserID(loginResponse.userId);
 
         // navigate to dashboard
-        print(mounted);
         if (mounted) {
           _navigateToDashboard(context);
         }
@@ -75,7 +74,6 @@ class _LoginState extends State<Login> {
   }
 
   Widget _displayErrorMessage(BuildContext context) {
-    print("_displayErrorMessage $errorMessage");
     if (errorMessage == "") {
       return const SizedBox(height: 20);
     }

@@ -13,6 +13,7 @@ class User {
     this.id,
     required this.name,
     required this.email,
+    this.amount,
     // required this.username,
     // this.dateOfBirth,
     // this.gender,
@@ -24,6 +25,7 @@ class User {
   String? id;
   String name;
   String email;
+  int? amount = 0;
   // String username;
   // dynamic dateOfBirth;
   // dynamic gender;
