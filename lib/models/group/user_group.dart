@@ -20,6 +20,7 @@ class UserGroupEntity {
   double outgoingAmount;
   double incomingAmount;
   dynamic summary;
+  bool? isChecked = false;
 
   UserGroupEntity({
     this.id,

@@ -1,3 +1,4 @@
+import 'package:equisplit_frontend/extensions/capitalize.dart';
 import 'package:equisplit_frontend/models/group/group.dart';
 import 'package:equisplit_frontend/screens/components/button.dart';
 import 'package:equisplit_frontend/screens/group/create.dart';
@@ -75,6 +76,13 @@ class _ViewUserGroupState extends State<ViewUserGroup> {
         automaticallyImplyLeading: false,
         centerTitle: true,
         elevation: 1,
+        actions: [
+          IconButton(
+              icon: const Icon(Icons.add),
+              onPressed: () {
+                print("Icon clicked");
+              }),
+        ],
       ),
       body: SafeArea(
         child: isLoaded && groups != null && groups!.isEmpty
@@ -153,7 +161,7 @@ class _ViewUserGroupState extends State<ViewUserGroup> {
                   foregroundColor: Colors.black,
                 ),
                 child: Text(
-                  groups![index].name.toUpperCase(),
+                  groups![index].name.capitalize(),
                   style: const TextStyle(
                     fontSize: 18,
                   ),

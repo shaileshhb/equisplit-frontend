@@ -1,3 +1,4 @@
+import 'package:equisplit_frontend/models/error/error_response.dart';
 import 'package:equisplit_frontend/models/group/group.dart';
 import 'package:equisplit_frontend/models/group/user_group.dart';
 import 'package:equisplit_frontend/utils/global.constant.dart';
@@ -22,6 +23,31 @@ class UserGroupService {
     if (response.statusCode == 200) {
       var body = response.body;
       return groupsFromJson(body);
+    }
+
+    return null;
+  }
+
+  Future<List<UserGroupEntity>?> getGroupUsers(String groupId) async {
+    var client = http.Client();
+    var authorizationToken = UserSharedPreference.getAuthorizationToken();
+
+    var uri = Uri.parse('${GlobalConstants.baseURL}/group/$groupId/users');
+
+    Map<String, String> headers = {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer $authorizationToken",
+    };
+
+    var response = await client.get(uri, headers: headers);
+
+    if (response.statusCode == 200) {
+      var body = response.body;
+      return userGroupsFromJson(body);
+    }
+
+    if (response.statusCode >= 400) {
+      throw ErrorResponse(error: errorResponseFromJson(response.body).error);
     }
 
     return null;
@@ -54,7 +80,7 @@ class UserGroupService {
     var authorizationToken = UserSharedPreference.getAuthorizationToken();
     var userId = UserSharedPreference.getUserID();
 
-    var uri = Uri.parse('${GlobalConstants.baseURL}/$userId/group');
+    var uri = Uri.parse('${GlobalConstants.baseURL}/user/$userId/group');
 
     Map<String, String> headers = {
       "Content-Type": "application/json",
