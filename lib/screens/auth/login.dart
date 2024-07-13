@@ -3,6 +3,7 @@ import 'package:equisplit_frontend/models/error/error_response.dart';
 import 'package:equisplit_frontend/screens/auth/components/login_button.dart';
 import 'package:equisplit_frontend/screens/auth/components/login_form_field.dart';
 import 'package:equisplit_frontend/screens/auth/register.dart';
+import 'package:equisplit_frontend/screens/group/view.dart';
 import 'package:equisplit_frontend/screens/home/dashboard.dart';
 import 'package:equisplit_frontend/services/auth/auth.dart';
 import 'package:equisplit_frontend/utils/user.shared_preference.dart';
@@ -46,7 +47,7 @@ class _LoginState extends State<Login> {
 
         // navigate to dashboard
         if (mounted) {
-          _navigateToDashboard(context);
+          _navigateToUserGroups(context);
         }
       }
     } on CustomException catch (e) {
@@ -71,6 +72,11 @@ class _LoginState extends State<Login> {
   void _navigateToDashboard(BuildContext context) {
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => const Dashboard()));
+  }
+
+  void _navigateToUserGroups(BuildContext context) {
+    Navigator.pushReplacement(context,
+        MaterialPageRoute(builder: (context) => const ViewUserGroup()));
   }
 
   Widget _displayErrorMessage(BuildContext context) {

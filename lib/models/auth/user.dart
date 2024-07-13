@@ -25,7 +25,7 @@ class User {
   String? id;
   String name;
   String email;
-  int? amount = 0;
+  double? amount = 0;
   // String username;
   // dynamic dateOfBirth;
   // dynamic gender;

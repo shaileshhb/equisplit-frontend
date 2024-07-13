@@ -5,6 +5,7 @@ class CustomFormField extends StatefulWidget {
   final controller;
   final String hintText;
   final String? Function(String?)? validator;
+  final void Function(String?)? onChange;
   final TextInputType? keyboardType;
   final List<TextInputFormatter>? inputFormatters;
 
@@ -15,6 +16,7 @@ class CustomFormField extends StatefulWidget {
     required this.validator,
     this.keyboardType,
     this.inputFormatters,
+    this.onChange,
   });
 
   @override
@@ -33,6 +35,7 @@ class _CustomFormFieldState extends State<CustomFormField> {
         validator: widget.validator,
         keyboardType: widget.keyboardType ?? TextInputType.number,
         inputFormatters: widget.inputFormatters,
+        onChanged: widget.onChange,
         decoration: InputDecoration(
           enabledBorder: const OutlineInputBorder(
             borderSide: BorderSide(

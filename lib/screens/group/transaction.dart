@@ -28,10 +28,17 @@ class _AddTransactionState extends State<AddTransaction> {
   List<User> selectedUsers = [];
   bool isLoaded = false;
   double transactionAmount = 0;
+  int selectedRadio = 1;
   String? currentUserId = UserSharedPreference.getUserID();
 
   final amountController = TextEditingController();
   final formGlobalKey = GlobalKey<FormState>();
+
+  final double marginLeft = 10.0;
+  final double marginBottom = 10.0;
+  final double marginTop = 10.0;
+  final double marginHorizontal = 10.0;
+  final double marginVertical = 5.0;
 
   void validate() {
     if (formGlobalKey.currentState!.validate()) {
@@ -39,11 +46,39 @@ class _AddTransactionState extends State<AddTransaction> {
     }
   }
 
-  final double marginLeft = 10.0;
-  final double marginBottom = 10.0;
-  final double marginTop = 10.0;
-  final double marginHorizontal = 10.0;
-  final double marginVertical = 5.0;
+  setSelectedRadio(int value) {
+    setState(() {
+      selectedRadio = value;
+    });
+    updateUserAmount();
+  }
+
+  updateUserAmount() {
+    List<User>? users = selectedUsers;
+
+    if (transactionAmount > 0 && users.isNotEmpty) {
+      double amount = transactionAmount / users.length;
+      for (var i = 0; i < users.length; i++) {
+        users[i].amount = double.parse(amount.toStringAsFixed(2));
+        for (var i = 0; i < userGroups!.length; i++) {
+          if (users[i].id == userGroups![i].user!.id) {
+            setState(() {
+              userGroups![i].user!.amount = users[i].amount;
+            });
+          }
+        }
+      }
+    }
+
+    for (var i = 0; i < userGroups!.length; i++) {
+      print(
+          "Found user ${userGroups![i].user!.id}, ${userGroups![i].user!.amount}");
+    }
+
+    setState(() {
+      selectedUsers = users;
+    });
+  }
 
   @override
   void initState() {
@@ -74,14 +109,18 @@ class _AddTransactionState extends State<AddTransaction> {
   }
 
   getCurrentUser() {
+    List<User> users = [];
+
     for (var i = 0; i < userGroups!.length; i++) {
-      if (userGroups![i].user!.id == currentUserId) {
-        setState(() {
-          userGroups![i].isChecked = true;
-          selectedUsers = [userGroups![i].user!];
-        });
-      }
+      users.add(userGroups![i].user!);
+      setState(() {
+        userGroups![i].isChecked = true;
+      });
     }
+
+    setState(() {
+      selectedUsers = users;
+    });
   }
 
   @override
@@ -121,6 +160,41 @@ class _AddTransactionState extends State<AddTransaction> {
                   children: [
                     transactionAmountWidget(),
                     const SizedBox(height: 10),
+                    SingleChildScrollView(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: RadioListTile(
+                              value: 1,
+                              title: const Text("Divide equally"),
+                              groupValue: selectedRadio,
+                              activeColor: GlobalColors.buttonColor,
+                              onChanged: (value) {
+                                if (value != null) {
+                                  setSelectedRadio(value);
+                                }
+                              },
+                            ),
+                          ),
+                          Expanded(
+                            child: RadioListTile(
+                              value: 2,
+                              title: const Text("Divide manually"),
+                              groupValue: selectedRadio,
+                              activeColor: GlobalColors.buttonColor,
+                              onChanged: (value) {
+                                if (value != null) {
+                                  setSelectedRadio(value);
+                                }
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 10),
                     ListView.builder(
                       scrollDirection: Axis.vertical,
                       shrinkWrap: true,
@@ -152,6 +226,13 @@ class _AddTransactionState extends State<AddTransaction> {
           return "Invalid amount.";
         }
         return null;
+      },
+      onChange: (value) {
+        print(value);
+        setState(() {
+          transactionAmount = double.parse(amountController.value.text);
+        });
+        updateUserAmount();
       },
     );
   }
