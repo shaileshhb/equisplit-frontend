@@ -44,7 +44,6 @@ class _GroupDetailsState extends State<GroupDetails> {
       var response =
           await UserTransactionService().getUserTransactions(widget.groupId);
       if (response != null) {
-        print(response.length);
         setState(() {
           userBalances = response;
         });
@@ -109,6 +108,7 @@ class _GroupDetailsState extends State<GroupDetails> {
                         _navigateToAddTransaction(context);
                       },
                     ),
+                    const SizedBox(height: 20),
                     ListView.builder(
                       scrollDirection: Axis.vertical,
                       shrinkWrap: true,

@@ -21,7 +21,7 @@ class User {
     // required this.isVerified,
   });
 
-  int? id;
+  String? id;
   String name;
   String email;
   // String username;

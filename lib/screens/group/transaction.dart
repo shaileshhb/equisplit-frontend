@@ -20,7 +20,7 @@ class AddTransaction extends StatefulWidget {
 }
 
 class _AddTransactionState extends State<AddTransaction> {
-  List<UserGroupEntity>? _userGroups;
+  List<UserGroupEntity>? userGroups = [];
   bool isLoaded = false;
   final double marginLeft = 10.0;
   final double marginBottom = 10.0;
@@ -32,6 +32,11 @@ class _AddTransactionState extends State<AddTransaction> {
   @override
   void initState() {
     super.initState();
+    setState(() {
+      userGroups = [];
+    });
+
+    getUserGroups();
   }
 
   getUserGroups() async {
@@ -39,7 +44,7 @@ class _AddTransactionState extends State<AddTransaction> {
       var response = await UserGroupService().getGroupUsers(widget.groupId);
       if (response != null) {
         setState(() {
-          _userGroups = response;
+          userGroups = response;
         });
       }
     } catch (err) {
@@ -62,7 +67,7 @@ class _AddTransactionState extends State<AddTransaction> {
         elevation: 1,
       ),
       body: SafeArea(
-        child: isLoaded && _userGroups != null && _userGroups!.isEmpty
+        child: isLoaded && userGroups != null && userGroups!.isEmpty
             ? const Center(
                 child: SizedBox(
                   width: 250,
@@ -70,7 +75,7 @@ class _AddTransactionState extends State<AddTransaction> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text(
-                        "Group details could not be fetched",
+                        "Users could not be fetched",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 20.0,
@@ -85,9 +90,9 @@ class _AddTransactionState extends State<AddTransaction> {
                 child: ListView.builder(
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
-                  itemCount: isLoaded ? _userGroups!.length : 5,
+                  itemCount: isLoaded ? userGroups!.length : 5,
                   itemBuilder: (context, index) {
-                    return _userGroups!.isNotEmpty
+                    return userGroups!.isNotEmpty
                         ? groupCard(index)
                         : const SkeletonCardBuilder();
                   },
@@ -108,40 +113,20 @@ class _AddTransactionState extends State<AddTransaction> {
         ),
         borderRadius: const BorderRadius.all(Radius.circular(12)),
       ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.only(left: marginLeft, top: marginTop),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    CheckboxListTile(
-                      title: Text(
-                        _userGroups![index].user!.name.capitalize(),
-                        style: const TextStyle(
-                          fontSize: 18,
-                        ),
-                      ),
-                      value: _userGroups![index].isChecked,
-                      onChanged: (bool? isChecked) {
-                        setState(() {
-                          _userGroups![index].isChecked = isChecked;
-                        });
-                      },
-                      controlAffinity: ListTileControlAffinity.leading,
-                    ),
-                  ],
-                ),
-              ),
-            ],
+      child: CheckboxListTile(
+        title: Text(
+          userGroups![index].user!.name.capitalize(),
+          style: const TextStyle(
+            fontSize: 18,
           ),
-        ],
+        ),
+        value: userGroups![index].isChecked,
+        onChanged: (bool? isChecked) {
+          setState(() {
+            userGroups![index].isChecked = isChecked;
+          });
+        },
+        controlAffinity: ListTileControlAffinity.leading,
       ),
     );
   }

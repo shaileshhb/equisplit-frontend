@@ -89,8 +89,6 @@ class UserGroupService {
 
     var body = groupToJson(group);
     var response = await client.post(uri, body: body, headers: headers);
-    print(response.statusCode);
-
     if (response.statusCode == 201) {
       return true;
     }

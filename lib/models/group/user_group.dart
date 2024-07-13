@@ -25,8 +25,8 @@ class UserGroupEntity {
   UserGroupEntity({
     this.id,
     required this.groupId,
-    this.outgoingAmount = 0,
-    this.incomingAmount = 0,
+    this.outgoingAmount = 0.0,
+    this.incomingAmount = 0.0,
     this.user,
     this.group,
     this.summary,

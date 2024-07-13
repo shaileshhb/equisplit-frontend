@@ -75,7 +75,6 @@ class AuthenticationService {
     var response = await client.get(uri, headers: headers);
 
     if (response.statusCode == 200) {
-      print(response.body);
       return userFromJson(response.body);
     }
     return null;
