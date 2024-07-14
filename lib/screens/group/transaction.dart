@@ -40,46 +40,6 @@ class _AddTransactionState extends State<AddTransaction> {
   final double marginHorizontal = 10.0;
   final double marginVertical = 5.0;
 
-  void validate() {
-    if (formGlobalKey.currentState!.validate()) {
-      formGlobalKey.currentState!.save();
-    }
-  }
-
-  setSelectedRadio(int value) {
-    setState(() {
-      selectedRadio = value;
-    });
-    updateUserAmount();
-  }
-
-  updateUserAmount() {
-    List<User>? users = selectedUsers;
-
-    if (transactionAmount > 0 && users.isNotEmpty) {
-      double amount = transactionAmount / users.length;
-      for (var i = 0; i < users.length; i++) {
-        users[i].amount = double.parse(amount.toStringAsFixed(2));
-        for (var i = 0; i < userGroups!.length; i++) {
-          if (users[i].id == userGroups![i].user!.id) {
-            setState(() {
-              userGroups![i].user!.amount = users[i].amount;
-            });
-          }
-        }
-      }
-    }
-
-    for (var i = 0; i < userGroups!.length; i++) {
-      print(
-          "Found user ${userGroups![i].user!.id}, ${userGroups![i].user!.amount}");
-    }
-
-    setState(() {
-      selectedUsers = users;
-    });
-  }
-
   @override
   void initState() {
     super.initState();
@@ -113,15 +73,102 @@ class _AddTransactionState extends State<AddTransaction> {
 
     for (var i = 0; i < userGroups!.length; i++) {
       users.add(userGroups![i].user!);
-      setState(() {
-        userGroups![i].isChecked = true;
-      });
+      userGroups![i].isChecked = true;
+      userGroups![i].user!.amount = 0;
     }
 
     setState(() {
       selectedUsers = users;
+      userGroups = List.from(userGroups!);
     });
   }
+
+  void validate() {
+    if (formGlobalKey.currentState!.validate()) {
+      formGlobalKey.currentState!.save();
+    }
+  }
+
+  setSelectedRadio(int value) {
+    setState(() {
+      selectedRadio = value;
+    });
+    updateUserAmount();
+  }
+
+  setTransactionAmount(amount) {
+    if (amount == "") {
+      updateUserAmount();
+      return;
+    }
+
+    if ((amount != null || amount != "") && double.parse(amount) > 0) {
+      setState(() {
+        transactionAmount = double.parse(amount);
+      });
+    }
+
+    updateUserAmount();
+  }
+
+  updateUserAmount() {
+    if (selectedRadio == 2) {
+      return;
+    }
+
+    List<User>? users = selectedUsers;
+
+    if (transactionAmount > 0 && users.isNotEmpty) {
+      double amount = transactionAmount / users.length;
+      for (var i = 0; i < users.length; i++) {
+        users[i].amount = double.parse(amount.toStringAsFixed(2));
+
+        for (var j = 0; j < userGroups!.length; j++) {
+          if (!userGroups![j].isChecked!) {
+            userGroups![j].user!.amount = 0;
+            continue;
+          }
+
+          if (users[i].id == userGroups![j].user!.id) {
+            userGroups![j].user!.amount = users[i].amount;
+          }
+        }
+      }
+    }
+
+    setState(() {
+      selectedUsers = List.from(users);
+      userGroups = List.from(userGroups!);
+    });
+  }
+
+  updateSelectedUser(int index, bool? isChecked) {
+    if (isChecked != null) {
+      userGroups![index].isChecked = isChecked;
+    }
+
+    if (isChecked == false) {
+      for (var i = 0; i < selectedUsers.length; i++) {
+        if (selectedUsers[i].id == userGroups![index].user!.id) {
+          selectedUsers.removeAt(i);
+          break;
+        }
+      }
+    }
+
+    if (isChecked == true) {
+      selectedUsers.add(userGroups![index].user!);
+    }
+
+    setState(() {
+      userGroups = List.from(userGroups!);
+      selectedUsers = List.from(selectedUsers);
+    });
+
+    updateUserAmount();
+  }
+
+  addUserTransactions() {}
 
   @override
   Widget build(BuildContext context) {
@@ -158,42 +205,9 @@ class _AddTransactionState extends State<AddTransaction> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    transactionAmountWidget(),
+                    selectTransactionDivision(),
                     const SizedBox(height: 10),
-                    SingleChildScrollView(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: RadioListTile(
-                              value: 1,
-                              title: const Text("Divide equally"),
-                              groupValue: selectedRadio,
-                              activeColor: GlobalColors.buttonColor,
-                              onChanged: (value) {
-                                if (value != null) {
-                                  setSelectedRadio(value);
-                                }
-                              },
-                            ),
-                          ),
-                          Expanded(
-                            child: RadioListTile(
-                              value: 2,
-                              title: const Text("Divide manually"),
-                              groupValue: selectedRadio,
-                              activeColor: GlobalColors.buttonColor,
-                              onChanged: (value) {
-                                if (value != null) {
-                                  setSelectedRadio(value);
-                                }
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    transactionAmountWidget(),
                     const SizedBox(height: 10),
                     ListView.builder(
                       scrollDirection: Axis.vertical,
@@ -201,7 +215,7 @@ class _AddTransactionState extends State<AddTransaction> {
                       itemCount: isLoaded ? userGroups!.length : 5,
                       itemBuilder: (context, index) {
                         return userGroups!.isNotEmpty
-                            ? groupCard(index)
+                            ? userListing(index)
                             : const SkeletonCardBuilder();
                       },
                     ),
@@ -212,10 +226,48 @@ class _AddTransactionState extends State<AddTransaction> {
     );
   }
 
+  SingleChildScrollView selectTransactionDivision() {
+    return SingleChildScrollView(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(
+            child: RadioListTile(
+              value: 1,
+              title: const Text("Divide equally"),
+              groupValue: selectedRadio,
+              activeColor: GlobalColors.buttonColor,
+              onChanged: (value) {
+                if (value != null) {
+                  setSelectedRadio(value);
+                }
+              },
+            ),
+          ),
+          Expanded(
+            child: RadioListTile(
+              value: 2,
+              title: const Text("Divide manually"),
+              groupValue: selectedRadio,
+              activeColor: GlobalColors.buttonColor,
+              onChanged: (value) {
+                if (value != null) {
+                  setSelectedRadio(value);
+                }
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   CustomFormField transactionAmountWidget() {
     return CustomFormField(
       controller: amountController,
       hintText: "Enter amount",
+      enabled: selectedRadio == 1,
       keyboardType: TextInputType.number,
       inputFormatters: <TextInputFormatter>[
         FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
@@ -228,16 +280,12 @@ class _AddTransactionState extends State<AddTransaction> {
         return null;
       },
       onChange: (value) {
-        print(value);
-        setState(() {
-          transactionAmount = double.parse(amountController.value.text);
-        });
-        updateUserAmount();
+        setTransactionAmount(value);
       },
     );
   }
 
-  Container groupCard(int index) {
+  Container userListing(int index) {
     return Container(
       margin: EdgeInsets.symmetric(
         horizontal: marginHorizontal,
@@ -273,9 +321,12 @@ class _AddTransactionState extends State<AddTransaction> {
 
   TextFormField userAmountField(int index) {
     return TextFormField(
+      // this key is important has it updates the value of the field when it is changed.
+      key: Key(userGroups![index].user!.amount.toString()),
       initialValue: userGroups![index].user!.amount != null
           ? userGroups![index].user!.amount.toString()
           : '0',
+      enabled: userGroups![index].isChecked!,
       keyboardType: TextInputType.number,
       inputFormatters: <TextInputFormatter>[
         FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
@@ -285,13 +336,14 @@ class _AddTransactionState extends State<AddTransaction> {
         fontSize: 19.0,
       ),
       decoration: InputDecoration(
-        enabledBorder: const OutlineInputBorder(
+        border: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(12)),
           borderSide: BorderSide(
             color: Color.fromARGB(255, 118, 118, 118),
           ),
         ),
         focusedBorder: OutlineInputBorder(
+          borderRadius: const BorderRadius.all(Radius.circular(12)),
           borderSide: BorderSide(
             color: Colors.grey.shade400,
           ),
@@ -323,9 +375,7 @@ class _AddTransactionState extends State<AddTransaction> {
       onChanged: userGroups![index].user!.id == currentUserId
           ? null
           : (bool? isChecked) {
-              setState(() {
-                userGroups![index].isChecked = isChecked;
-              });
+              updateSelectedUser(index, isChecked);
             },
       controlAffinity: ListTileControlAffinity.leading,
     );

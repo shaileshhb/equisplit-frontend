@@ -8,6 +8,7 @@ class CustomFormField extends StatefulWidget {
   final void Function(String?)? onChange;
   final TextInputType? keyboardType;
   final List<TextInputFormatter>? inputFormatters;
+  final bool? enabled;
 
   const CustomFormField({
     super.key,
@@ -17,6 +18,7 @@ class CustomFormField extends StatefulWidget {
     this.keyboardType,
     this.inputFormatters,
     this.onChange,
+    this.enabled,
   });
 
   @override
@@ -36,8 +38,9 @@ class _CustomFormFieldState extends State<CustomFormField> {
         keyboardType: widget.keyboardType ?? TextInputType.number,
         inputFormatters: widget.inputFormatters,
         onChanged: widget.onChange,
+        enabled: widget.enabled ?? true,
         decoration: InputDecoration(
-          enabledBorder: const OutlineInputBorder(
+          border: const OutlineInputBorder(
             borderSide: BorderSide(
               color: Color.fromARGB(255, 206, 206, 206),
             ),
