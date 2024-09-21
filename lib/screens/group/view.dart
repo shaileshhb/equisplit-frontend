@@ -59,12 +59,14 @@ class _ViewUserGroupState extends State<ViewUserGroup> {
 
   void _navigateToGroupDetails(BuildContext context, Group group) {
     Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => GroupDetails(
-                  groupId: group.id!,
-                  groupName: group.name,
-                )));
+      context,
+      MaterialPageRoute(
+        builder: (context) => GroupDetails(
+          groupId: group.id!,
+          groupName: group.name,
+        ),
+      ),
+    );
   }
 
   @override
@@ -76,11 +78,6 @@ class _ViewUserGroupState extends State<ViewUserGroup> {
         automaticallyImplyLeading: false,
         centerTitle: true,
         elevation: 1,
-        leading: BackButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
       ),
       body: SafeArea(
         child: isLoaded && groups != null && groups!.isEmpty

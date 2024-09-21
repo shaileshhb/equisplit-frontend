@@ -29,6 +29,7 @@ class User {
   String name;
   String email;
   double? amount = 0;
+  bool? isChecked = false;
   // String username;
   // dynamic dateOfBirth;
   // dynamic gender;

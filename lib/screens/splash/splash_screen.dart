@@ -1,6 +1,6 @@
 import 'package:equisplit_frontend/screens/auth/login.dart';
 import 'package:equisplit_frontend/screens/home/dashboard.dart';
-import 'package:equisplit_frontend/services/auth/auth.dart';
+import 'package:equisplit_frontend/services/user/auth.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {

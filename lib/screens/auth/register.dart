@@ -1,7 +1,7 @@
 import 'package:equisplit_frontend/models/auth/register_request.dart';
 import 'package:equisplit_frontend/models/error/error_response.dart';
 import 'package:equisplit_frontend/screens/auth/login.dart';
-import 'package:equisplit_frontend/services/auth/auth.dart';
+import 'package:equisplit_frontend/services/user/auth.dart';
 import 'package:equisplit_frontend/utils/toast.dart';
 import 'package:flutter/material.dart';
 

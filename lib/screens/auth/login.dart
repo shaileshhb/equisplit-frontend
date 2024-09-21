@@ -5,7 +5,7 @@ import 'package:equisplit_frontend/screens/auth/components/login_button.dart';
 import 'package:equisplit_frontend/screens/auth/components/login_form_field.dart';
 import 'package:equisplit_frontend/screens/auth/register.dart';
 import 'package:equisplit_frontend/screens/group/view.dart';
-import 'package:equisplit_frontend/services/auth/auth.dart';
+import 'package:equisplit_frontend/services/user/auth.dart';
 import 'package:equisplit_frontend/utils/toast.dart';
 import 'package:equisplit_frontend/utils/user.shared_preference.dart';
 import 'package:flutter/material.dart';
