@@ -1,6 +1,7 @@
 import 'package:equisplit_frontend/extensions/capitalize.dart';
 import 'package:equisplit_frontend/models/auth/invitation.dart';
 import 'package:equisplit_frontend/models/error/error_response.dart';
+import 'package:equisplit_frontend/screens/skeleton/builder.dart';
 import 'package:equisplit_frontend/services/user/invitation.dart';
 import 'package:equisplit_frontend/utils/global.colors.dart';
 import 'package:equisplit_frontend/utils/toast.dart';
@@ -27,8 +28,10 @@ class _ViewInvitationsState extends State<ViewInvitations> {
   void initState() {
     super.initState();
     setState(() {
+      isLoaded = false;
       invitations = [];
     });
+    getInvitations();
   }
 
   void getInvitations() async {
@@ -39,6 +42,10 @@ class _ViewInvitationsState extends State<ViewInvitations> {
       });
     } on CustomException catch (e) {
       ToastNoContext().showErrorToast(e.error);
+    } finally {
+      setState(() {
+        isLoaded = true;
+      });
     }
   }
 
@@ -58,7 +65,40 @@ class _ViewInvitationsState extends State<ViewInvitations> {
         ),
       ),
       body: SafeArea(
-        child: Text("This are your invitations"),
+        child: isLoaded && invitations != null && invitations!.isEmpty
+            ? const Center(
+                child: SizedBox(
+                  width: 250,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        "You don't have any invitations",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 24.0,
+                          fontWeight: FontWeight.bold,
+                          color: GlobalColors.buttonColor,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                    ],
+                  ),
+                ),
+              )
+            : Container(
+                margin: EdgeInsets.only(top: marginTop),
+                child: ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount: isLoaded ? invitations!.length : 5,
+                  itemBuilder: (context, index) {
+                    return invitations!.isNotEmpty
+                        ? invitationTile(index)
+                        : const SkeletonCardBuilder();
+                  },
+                ),
+              ),
       ),
     );
   }
@@ -78,7 +118,34 @@ class _ViewInvitationsState extends State<ViewInvitations> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(invitations![index].user!.name.capitalize()),
+          Card(
+            elevation: 0.2,
+            child: ListTile(
+              title: Text(
+                invitations![index].group!.name.capitalize(),
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  color: GlobalColors.buttonColor,
+                  fontSize: 16.0,
+                ),
+              ),
+              subtitle: Text(
+                "Invited by: ${invitations![index].invitedByUser!.name.capitalize()}",
+                style: const TextStyle(
+                  fontWeight: FontWeight.w500,
+                  color: GlobalColors.buttonColor,
+                  fontSize: 14.0,
+                ),
+              ),
+              trailing: IconButton(
+                icon: const Icon(Icons.thumb_up_alt),
+                onPressed: () {
+                  print("accept clicked");
+                },
+              ),
+              enabled: invitations![index].isAccepted == false,
+            ),
+          ),
         ],
       ),
     );

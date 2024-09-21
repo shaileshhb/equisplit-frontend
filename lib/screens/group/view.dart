@@ -31,6 +31,7 @@ class _ViewUserGroupState extends State<ViewUserGroup> {
   void initState() {
     super.initState();
     setState(() {
+      isLoaded = false;
       groups = [];
     });
     getUserGroups();

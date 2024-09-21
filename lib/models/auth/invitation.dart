@@ -5,6 +5,7 @@
 import 'dart:convert';
 
 import 'package:equisplit_frontend/models/auth/user.dart';
+import 'package:equisplit_frontend/models/group/group.dart';
 
 Invitation invitationFromJson(String str) =>
     Invitation.fromJson(json.decode(str));
@@ -22,22 +23,34 @@ class Invitation {
     this.invitedBy,
     this.isAccepted,
     this.user,
+    this.group,
+    this.invitedByUser,
   });
 
   String? id;
   String userId;
-  User? user;
   String groupId;
   String? invitedBy;
   bool? isAccepted;
+  User? user;
+  Group? group;
+  User? invitedByUser;
 
-  factory Invitation.fromJson(Map<String, dynamic> json) => Invitation(
-        id: json["id"],
-        userId: json["userId"],
-        groupId: json["groupId"],
-        invitedBy: json["invitedBy"],
-        isAccepted: json["isAccepted"],
-        user: json["user"],
+  factory Invitation.fromJson(Map<String, dynamic> body) => Invitation(
+        id: body["id"],
+        userId: body["userId"],
+        groupId: body["groupId"],
+        invitedBy: body["invitedBy"],
+        isAccepted: body["isAccepted"],
+        user: body["user"] != null
+            ? userFromJson(json.encode(body["user"]))
+            : null,
+        group: body["group"] != null
+            ? groupFromJson(json.encode(body["group"]))
+            : null,
+        invitedByUser: body["invitedByUser"] != null
+            ? userFromJson(json.encode(body["invitedByUser"]))
+            : null,
       );
 
   Map<String, dynamic> toJson() => {
