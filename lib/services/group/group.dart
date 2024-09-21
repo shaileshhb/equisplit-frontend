@@ -9,7 +9,7 @@ class UserGroupService {
   Future<List<Group>?> getUserGroups() async {
     var client = http.Client();
     var authorizationToken = UserSharedPreference.getAuthorizationToken();
-    String userId = UserSharedPreference.getUserID()!;
+    String userId = UserSharedPreference.getUserId()!;
 
     var uri = Uri.parse('${GlobalConstants.baseURL}/user/$userId/groups');
 
@@ -78,7 +78,7 @@ class UserGroupService {
   Future<bool> createGroup(Group group) async {
     var client = http.Client();
     var authorizationToken = UserSharedPreference.getAuthorizationToken();
-    var userId = UserSharedPreference.getUserID();
+    var userId = UserSharedPreference.getUserId();
 
     var uri = Uri.parse('${GlobalConstants.baseURL}/user/$userId/group');
 

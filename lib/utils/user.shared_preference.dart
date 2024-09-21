@@ -21,7 +21,7 @@ class UserSharedPreference {
     await _preferences.setString(_keyUserID, userID);
   }
 
-  static String? getUserID() {
+  static String? getUserId() {
     return _preferences.getString(_keyUserID);
   }
 

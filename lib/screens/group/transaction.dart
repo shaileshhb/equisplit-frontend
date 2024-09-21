@@ -1,6 +1,7 @@
 import 'package:equisplit_frontend/extensions/capitalize.dart';
 import 'package:equisplit_frontend/models/auth/user.dart';
 import 'package:equisplit_frontend/models/group/user_group.dart';
+import 'package:equisplit_frontend/screens/components/bottom_navigation_bar.dart';
 import 'package:equisplit_frontend/screens/components/form_field.dart';
 import 'package:equisplit_frontend/screens/skeleton/builder.dart';
 import 'package:equisplit_frontend/services/group/group.dart';
@@ -29,7 +30,7 @@ class _AddTransactionState extends State<AddTransaction> {
   bool isLoaded = false;
   double transactionAmount = 0;
   int selectedRadio = 1;
-  String? currentUserId = UserSharedPreference.getUserID();
+  String? currentUserId = UserSharedPreference.getUserId();
 
   final amountController = TextEditingController();
   final formGlobalKey = GlobalKey<FormState>();
@@ -223,6 +224,7 @@ class _AddTransactionState extends State<AddTransaction> {
                 ),
               ),
       ),
+      bottomNavigationBar: buildBottomNavigationBar(context),
     );
   }
 

@@ -1,5 +1,6 @@
 import 'package:equisplit_frontend/extensions/capitalize.dart';
 import 'package:equisplit_frontend/models/group/group.dart';
+import 'package:equisplit_frontend/screens/components/bottom_navigation_bar.dart';
 import 'package:equisplit_frontend/screens/components/button.dart';
 import 'package:equisplit_frontend/screens/group/create.dart';
 import 'package:equisplit_frontend/screens/group/details.dart';
@@ -18,7 +19,7 @@ class ViewUserGroup extends StatefulWidget {
 
 class _ViewUserGroupState extends State<ViewUserGroup> {
   List<Group>? groups;
-  String userId = UserSharedPreference.getUserID()!;
+  String userId = UserSharedPreference.getUserId()!;
   bool isLoaded = false;
   final double marginLeft = 10.0;
   final double marginBottom = 10.0;
@@ -78,6 +79,14 @@ class _ViewUserGroupState extends State<ViewUserGroup> {
         automaticallyImplyLeading: false,
         centerTitle: true,
         elevation: 1,
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.logout_outlined),
+            onPressed: () {
+              // how do i logout?
+            },
+          ),
+        ],
       ),
       body: SafeArea(
         child: isLoaded && groups != null && groups!.isEmpty
@@ -127,6 +136,7 @@ class _ViewUserGroupState extends State<ViewUserGroup> {
         foregroundColor: Colors.white,
         child: const Icon(Icons.add),
       ),
+      bottomNavigationBar: buildBottomNavigationBar(context),
     );
   }
 

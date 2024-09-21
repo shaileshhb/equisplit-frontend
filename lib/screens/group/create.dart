@@ -29,7 +29,7 @@ class _CreateGroupState extends State<CreateGroup> {
     try {
       var group = Group(
         name: nameController.text,
-        createdBy: UserSharedPreference.getUserID()!,
+        createdBy: UserSharedPreference.getUserId()!,
       );
 
       var response = await UserGroupService().createGroup(group);

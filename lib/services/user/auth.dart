@@ -63,7 +63,7 @@ class AuthenticationService {
     var client = http.Client();
 
     var authorizationToken = UserSharedPreference.getAuthorizationToken();
-    var userID = UserSharedPreference.getUserID();
+    var userID = UserSharedPreference.getUserId();
 
     if (userID == null) {
       return null;

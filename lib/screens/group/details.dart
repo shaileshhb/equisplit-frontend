@@ -1,5 +1,6 @@
 import 'package:equisplit_frontend/extensions/capitalize.dart';
 import 'package:equisplit_frontend/models/group/user_group.dart';
+import 'package:equisplit_frontend/screens/components/bottom_navigation_bar.dart';
 import 'package:equisplit_frontend/screens/components/button.dart';
 import 'package:equisplit_frontend/screens/group/transaction.dart';
 import 'package:equisplit_frontend/screens/skeleton/builder.dart';
@@ -171,6 +172,7 @@ class _GroupDetailsState extends State<GroupDetails> {
                 ),
               ),
       ),
+      bottomNavigationBar: buildBottomNavigationBar(context),
     );
   }
 

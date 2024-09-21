@@ -2,6 +2,7 @@ import 'package:equisplit_frontend/extensions/capitalize.dart';
 import 'package:equisplit_frontend/models/auth/invitation.dart';
 import 'package:equisplit_frontend/models/auth/user.dart';
 import 'package:equisplit_frontend/models/error/error_response.dart';
+import 'package:equisplit_frontend/screens/components/bottom_navigation_bar.dart';
 import 'package:equisplit_frontend/screens/components/button.dart';
 import 'package:equisplit_frontend/screens/skeleton/builder.dart';
 import 'package:equisplit_frontend/services/user/auth.dart';
@@ -143,6 +144,7 @@ class _InviteUserToGroupState extends State<InviteUserToGroup> {
           ],
         ),
       ),
+      bottomNavigationBar: buildBottomNavigationBar(context),
     );
   }
 

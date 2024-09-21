@@ -9,7 +9,7 @@ class InvitationService {
     var client = http.Client();
 
     var authorizationToken = UserSharedPreference.getAuthorizationToken();
-    var userID = UserSharedPreference.getUserID();
+    var userID = UserSharedPreference.getUserId();
 
     if (userID == null) {
       return false;
@@ -35,18 +35,49 @@ class InvitationService {
     return false;
   }
 
+  Future<bool> acceptInvitation(Invitation invitation) async {
+    var client = http.Client();
+
+    var authorizationToken = UserSharedPreference.getAuthorizationToken();
+    var userId = UserSharedPreference.getUserId();
+
+    if (userId == null) {
+      return false;
+    }
+
+    var uri = Uri.parse(
+        '${GlobalConstants.baseURL}/user-invitations/${invitation.id}');
+
+    Map<String, String> headers = {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer $authorizationToken",
+    };
+
+    var body = invitationToJson(invitation);
+    var response = await client.put(uri, body: body, headers: headers);
+    if (response.statusCode == 202) {
+      return true;
+    }
+
+    if (response.statusCode >= 400) {
+      throw CustomException(errorResponseFromJson(response.body).error);
+    }
+
+    return false;
+  }
+
   Future<List<Invitation>?> getInvitations() async {
     var client = http.Client();
 
     var authorizationToken = UserSharedPreference.getAuthorizationToken();
-    var userID = UserSharedPreference.getUserID();
+    var userId = UserSharedPreference.getUserId();
 
-    if (userID == null) {
+    if (userId == null) {
       return null;
     }
 
     Map<String, String> queryParams = {
-      "userId": userID,
+      "userId": userId,
     };
 
     var uri = Uri.parse('${GlobalConstants.baseURL}/user-invitations')
