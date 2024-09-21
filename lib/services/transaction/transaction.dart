@@ -38,7 +38,6 @@ class UserTransactionService {
   ) async {
     var client = http.Client();
     var authorizationToken = UserSharedPreference.getAuthorizationToken();
-    var userId = UserSharedPreference.getUserID();
 
     var uri =
         Uri.parse('${GlobalConstants.baseURL}/group/$groupId/transactions');

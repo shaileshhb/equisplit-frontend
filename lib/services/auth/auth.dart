@@ -52,6 +52,10 @@ class AuthenticationService {
       var body = response.body;
       return loginResponseFromJson(body);
     }
+
+    if (response.statusCode >= 400) {
+      throw CustomException(errorResponseFromJson(response.body).error);
+    }
     return null;
   }
 
@@ -65,7 +69,7 @@ class AuthenticationService {
       return null;
     }
 
-    var uri = Uri.parse('${GlobalConstants.baseURL}/user/$userID');
+    var uri = Uri.parse('${GlobalConstants.baseURL}/users/$userID');
 
     Map<String, String> headers = {
       "Content-Type": "application/json",
@@ -76,6 +80,35 @@ class AuthenticationService {
 
     if (response.statusCode == 200) {
       return userFromJson(response.body);
+    }
+
+    if (response.statusCode >= 400) {
+      throw CustomException(errorResponseFromJson(response.body).error);
+    }
+    return null;
+  }
+
+  Future<List<User>?> getUsers(Map<String, dynamic>? queryparams) async {
+    var client = http.Client();
+
+    var authorizationToken = UserSharedPreference.getAuthorizationToken();
+
+    var uri = Uri.parse('${GlobalConstants.baseURL}/users')
+        .replace(queryParameters: queryparams);
+
+    Map<String, String> headers = {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer $authorizationToken"
+    };
+
+    var response = await client.get(uri, headers: headers);
+
+    if (response.statusCode == 200) {
+      return usersFromJson(response.body);
+    }
+
+    if (response.statusCode >= 400) {
+      throw CustomException(errorResponseFromJson(response.body).error);
     }
     return null;
   }

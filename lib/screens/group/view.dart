@@ -76,13 +76,11 @@ class _ViewUserGroupState extends State<ViewUserGroup> {
         automaticallyImplyLeading: false,
         centerTitle: true,
         elevation: 1,
-        actions: [
-          IconButton(
-              icon: const Icon(Icons.add),
-              onPressed: () {
-                print("Icon clicked");
-              }),
-        ],
+        leading: BackButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: SafeArea(
         child: isLoaded && groups != null && groups!.isEmpty

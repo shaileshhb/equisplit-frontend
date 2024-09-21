@@ -1,11 +1,12 @@
+import 'package:equisplit_frontend/extensions/capitalize.dart';
 import 'package:equisplit_frontend/models/auth/login_request.dart';
 import 'package:equisplit_frontend/models/error/error_response.dart';
 import 'package:equisplit_frontend/screens/auth/components/login_button.dart';
 import 'package:equisplit_frontend/screens/auth/components/login_form_field.dart';
 import 'package:equisplit_frontend/screens/auth/register.dart';
 import 'package:equisplit_frontend/screens/group/view.dart';
-import 'package:equisplit_frontend/screens/home/dashboard.dart';
 import 'package:equisplit_frontend/services/auth/auth.dart';
+import 'package:equisplit_frontend/utils/toast.dart';
 import 'package:equisplit_frontend/utils/user.shared_preference.dart';
 import 'package:flutter/material.dart';
 
@@ -51,8 +52,7 @@ class _LoginState extends State<Login> {
         }
       }
     } on CustomException catch (e) {
-      print(e.error);
-      errorMessage = e.error;
+      ToastNoContext().showErrorToast(e.error.capitalize());
     }
   }
 
@@ -69,35 +69,9 @@ class _LoginState extends State<Login> {
         context, MaterialPageRoute(builder: (context) => const Register()));
   }
 
-  void _navigateToDashboard(BuildContext context) {
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const Dashboard()));
-  }
-
   void _navigateToUserGroups(BuildContext context) {
     Navigator.pushReplacement(context,
         MaterialPageRoute(builder: (context) => const ViewUserGroup()));
-  }
-
-  Widget _displayErrorMessage(BuildContext context) {
-    if (errorMessage == "") {
-      return const SizedBox(height: 20);
-    }
-
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        const SizedBox(height: 20),
-        Text(
-          errorMessage,
-          style: const TextStyle(
-            color: Color(0xF0443800),
-            fontSize: 16,
-          ),
-        ),
-      ],
-    );
   }
 
   @override
@@ -188,8 +162,6 @@ class _LoginState extends State<Login> {
                       ),
                     ],
                   ),
-
-                  _displayErrorMessage(context),
                 ],
               ),
             ),

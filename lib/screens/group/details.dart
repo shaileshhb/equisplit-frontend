@@ -1,7 +1,10 @@
 import 'package:equisplit_frontend/extensions/capitalize.dart';
+import 'package:equisplit_frontend/models/group/user_group.dart';
 import 'package:equisplit_frontend/screens/components/button.dart';
 import 'package:equisplit_frontend/screens/group/transaction.dart';
 import 'package:equisplit_frontend/screens/skeleton/builder.dart';
+import 'package:equisplit_frontend/screens/users/invite_users.dart';
+import 'package:equisplit_frontend/services/group/group.dart';
 import 'package:equisplit_frontend/services/transaction/transaction.dart';
 import 'package:equisplit_frontend/services/transaction/user_balance.dart';
 import 'package:equisplit_frontend/utils/global.colors.dart';
@@ -22,7 +25,9 @@ class GroupDetails extends StatefulWidget {
 }
 
 class _GroupDetailsState extends State<GroupDetails> {
+  final userGroupService = UserGroupService();
   List<UserBalance>? userBalances;
+  List<UserGroupEntity>? groupUsers;
   bool isLoaded = false;
   final double marginLeft = 10.0;
   final double marginBottom = 10.0;
@@ -37,6 +42,23 @@ class _GroupDetailsState extends State<GroupDetails> {
       userBalances = [];
     });
     getUserBalances();
+  }
+
+  void getGroupUsers() async {
+    try {
+      var response = await userGroupService.getGroupUsers(widget.groupId);
+      if (response != null) {
+        setState(() {
+          groupUsers = response;
+        });
+      }
+    } catch (err) {
+      print(err);
+    } finally {
+      setState(() {
+        isLoaded = true;
+      });
+    }
   }
 
   void getUserBalances() async {
@@ -57,14 +79,28 @@ class _GroupDetailsState extends State<GroupDetails> {
     }
   }
 
+  void _navigateToInviteUsers(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => InviteUserToGroup(
+          groupId: widget.groupId,
+          groupName: widget.groupName,
+        ),
+      ),
+    );
+  }
+
   void _navigateToAddTransaction(BuildContext context) {
     Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => AddTransaction(
-                  groupId: widget.groupId,
-                  groupName: widget.groupName,
-                )));
+      context,
+      MaterialPageRoute(
+        builder: (context) => AddTransaction(
+          groupId: widget.groupId,
+          groupName: widget.groupName,
+        ),
+      ),
+    );
   }
 
   @override
@@ -76,21 +112,33 @@ class _GroupDetailsState extends State<GroupDetails> {
         automaticallyImplyLeading: false,
         centerTitle: true,
         elevation: 1,
+        leading: BackButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: SafeArea(
         child: isLoaded && userBalances != null && userBalances!.isEmpty
-            ? const Center(
+            ? Center(
                 child: SizedBox(
                   width: 250,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Text(
+                      const Text(
                         "Group details could not be fetched",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 20.0,
                         ),
+                      ),
+                      const SizedBox(height: 10),
+                      CustomButton(
+                        buttonLabel: "Invite users",
+                        onTap: () {
+                          _navigateToInviteUsers(context);
+                        },
                       ),
                     ],
                   ),

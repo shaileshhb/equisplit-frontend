@@ -1,6 +1,8 @@
 import 'package:equisplit_frontend/models/auth/register_request.dart';
+import 'package:equisplit_frontend/models/error/error_response.dart';
 import 'package:equisplit_frontend/screens/auth/login.dart';
 import 'package:equisplit_frontend/services/auth/auth.dart';
+import 'package:equisplit_frontend/utils/toast.dart';
 import 'package:flutter/material.dart';
 
 import '../../utils/user.shared_preference.dart';
@@ -70,8 +72,9 @@ class _RegisterState extends State<Register> {
           _navigateToOnboardingScreen(context);
         }
       }
-    } catch (err) {
+    } on CustomException catch (err) {
       print(err);
+      ToastNoContext().showErrorToast(err.error);
     }
   }
 
@@ -147,21 +150,6 @@ class _RegisterState extends State<Register> {
 
                   const SizedBox(height: 15),
 
-                  // LoginFormField(
-                  //   controller: usernameController,
-                  //   hintText: "Username",
-                  //   obscureText: false,
-                  //   validator: (username) {
-                  //     if (username!.isEmpty ||
-                  //         !RegExp(r'[a-z A-Z0-9]+$').hasMatch(username)) {
-                  //       return "Invalid username";
-                  //     }
-                  //     return null;
-                  //   },
-                  // ),
-
-                  // const SizedBox(height: 15),
-
                   LoginFormField(
                     controller: emailController,
                     hintText: "Email",
@@ -191,33 +179,6 @@ class _RegisterState extends State<Register> {
                   ),
 
                   const SizedBox(height: 15),
-
-                  // controller: genderController,
-                  // DropdownField(
-                  //   items: genderList,
-                  //   selectedValue: selectedValue,
-                  //   hintText: "Gender",
-                  //   onChanged: onGenderChange,
-                  //   validator: null,
-                  // ),
-
-                  // const SizedBox(height: 15),
-
-                  // LoginFormField(
-                  //   controller: contactController,
-                  //   hintText: "Contact",
-                  //   obscureText: false,
-                  //   validator: null,
-                  // ),
-
-                  // const SizedBox(height: 15),
-
-                  // DateOfBirthField(
-                  //   controller: dateOfBirthController,
-                  //   hintText: "Date of birth",
-                  // ),
-
-                  // const SizedBox(height: 20),
 
                   // login button
                   LoginButton(
