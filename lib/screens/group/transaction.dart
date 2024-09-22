@@ -1,11 +1,15 @@
 import 'package:equisplit_frontend/extensions/capitalize.dart';
 import 'package:equisplit_frontend/models/auth/user.dart';
+import 'package:equisplit_frontend/models/error/error_response.dart';
 import 'package:equisplit_frontend/models/group/user_group.dart';
+import 'package:equisplit_frontend/models/transaction/transaction.dart';
 import 'package:equisplit_frontend/screens/components/bottom_navigation_bar.dart';
+import 'package:equisplit_frontend/screens/components/button.dart';
 import 'package:equisplit_frontend/screens/components/form_field.dart';
 import 'package:equisplit_frontend/screens/skeleton/builder.dart';
 import 'package:equisplit_frontend/services/group/group.dart';
 import 'package:equisplit_frontend/utils/global.colors.dart';
+import 'package:equisplit_frontend/utils/toast.dart';
 import 'package:equisplit_frontend/utils/user.shared_preference.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -169,7 +173,36 @@ class _AddTransactionState extends State<AddTransaction> {
     updateUserAmount();
   }
 
-  addUserTransactions() {}
+  addUserTransactions() {
+    List<Transaction> transactions = [];
+
+    for (var i = 0; i < userGroups!.length; i++) {
+      print(
+          "user name: ${userGroups![i].user!.name}, amount: ${userGroups![i].user!.amount}");
+
+      if (userGroups![i].user!.amount! > 0) {
+        Transaction transaction = Transaction(
+          groupId: widget.groupId,
+          payeeId: userGroups![i].user!.id!,
+          payerId: UserSharedPreference.getUserId()!,
+          amount: userGroups![i].user!.amount!,
+        );
+
+        transactions.add(transaction);
+      }
+    }
+
+    for (var i = 0; i < transactions.length; i++) {
+      print(
+          "payeeId: ${transactions[i].payeeId}, amount: ${transactions[i].amount}");
+    }
+  }
+
+  addTransactions() async {
+    try {} on CustomException catch (e) {
+      ToastNoContext().showErrorToast(e.error);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -180,6 +213,11 @@ class _AddTransactionState extends State<AddTransaction> {
         automaticallyImplyLeading: false,
         centerTitle: true,
         elevation: 1,
+        leading: BackButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: SafeArea(
         child: isLoaded && userGroups != null && userGroups!.isEmpty
@@ -219,6 +257,13 @@ class _AddTransactionState extends State<AddTransaction> {
                             ? userListing(index)
                             : const SkeletonCardBuilder();
                       },
+                    ),
+                    const SizedBox(height: 10),
+                    CustomButton(
+                      onTap: () {
+                        addUserTransactions();
+                      },
+                      buttonLabel: "Add Transaction",
                     ),
                   ],
                 ),
@@ -293,30 +338,32 @@ class _AddTransactionState extends State<AddTransaction> {
         horizontal: marginHorizontal,
         vertical: marginVertical,
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Expanded(
-            flex: 2,
-            child: Card(
-              elevation: 0.2,
-              shape: RoundedRectangleBorder(
-                side: BorderSide(
-                  color: Theme.of(context).colorScheme.outline,
+      child: SingleChildScrollView(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              flex: 2,
+              child: Card(
+                elevation: 0.2,
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(
+                    color: Theme.of(context).colorScheme.outline,
+                  ),
+                  borderRadius: const BorderRadius.all(Radius.circular(12)),
                 ),
-                borderRadius: const BorderRadius.all(Radius.circular(12)),
+                child: userSelectionTile(index),
               ),
-              child: userSelectionTile(index),
             ),
-          ),
-          Expanded(
-            child: SizedBox(
-              height: 55,
-              child: userAmountField(index),
+            Expanded(
+              child: SizedBox(
+                height: 55,
+                child: userAmountField(index),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -329,6 +376,9 @@ class _AddTransactionState extends State<AddTransaction> {
           ? userGroups![index].user!.amount.toString()
           : '0',
       enabled: userGroups![index].isChecked!,
+      onChanged: (value) {
+        userGroups![index].user!.amount = double.parse(value);
+      },
       keyboardType: TextInputType.number,
       inputFormatters: <TextInputFormatter>[
         FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),

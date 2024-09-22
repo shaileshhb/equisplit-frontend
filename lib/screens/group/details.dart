@@ -127,6 +127,13 @@ class _GroupDetailsState extends State<GroupDetails> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
+                      CustomButton(
+                        buttonLabel: "Add new transaction",
+                        onTap: () {
+                          _navigateToAddTransaction(context);
+                        },
+                      ),
+                      const SizedBox(height: 20),
                       const Text(
                         "Group details could not be fetched",
                         textAlign: TextAlign.center,
@@ -151,13 +158,6 @@ class _GroupDetailsState extends State<GroupDetails> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    CustomButton(
-                      buttonLabel: "Add new transaction",
-                      onTap: () {
-                        _navigateToAddTransaction(context);
-                      },
-                    ),
-                    const SizedBox(height: 20),
                     ListView.builder(
                       scrollDirection: Axis.vertical,
                       shrinkWrap: true,

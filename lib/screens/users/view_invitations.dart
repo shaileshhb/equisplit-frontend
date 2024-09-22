@@ -36,6 +36,10 @@ class _ViewInvitationsState extends State<ViewInvitations> {
 
   void getInvitations() async {
     try {
+      setState(() {
+        isLoaded = true;
+        invitations = [];
+      });
       var response = await service.getInvitations();
       setState(() {
         invitations = response;
@@ -46,6 +50,26 @@ class _ViewInvitationsState extends State<ViewInvitations> {
       setState(() {
         isLoaded = true;
       });
+    }
+  }
+
+  void acceptInvitation(int index) async {
+    try {
+      setState(() {
+        isLoaded = false;
+      });
+
+      Invitation invitation = invitations![index];
+      invitation.isAccepted = true;
+      await service.acceptInvitation(invitation);
+
+      setState(() {
+        invitations = [];
+      });
+
+      getInvitations();
+    } on CustomException catch (e) {
+      ToastNoContext().showErrorToast(e.error);
     }
   }
 
@@ -91,7 +115,7 @@ class _ViewInvitationsState extends State<ViewInvitations> {
                 child: ListView.builder(
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
-                  itemCount: isLoaded ? invitations!.length : 5,
+                  itemCount: invitations!.length,
                   itemBuilder: (context, index) {
                     return invitations!.isNotEmpty
                         ? invitationTile(index)
@@ -140,7 +164,7 @@ class _ViewInvitationsState extends State<ViewInvitations> {
               trailing: IconButton(
                 icon: const Icon(Icons.thumb_up_alt),
                 onPressed: () {
-                  print("accept clicked");
+                  acceptInvitation(index);
                 },
               ),
               enabled: invitations![index].isAccepted == false,
